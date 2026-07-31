@@ -25,10 +25,10 @@ func _ready() -> void:
 	name = importer.get_format_name()
 	var enabled_plugins = ProjectSettings.get_setting("editor_plugins/enabled")
 	var has_spriteframe_keyframer = enabled_plugins.has("res://addons/spriteframes_keyframer/plugin.cfg")
-	if has_spriteframe_keyframer:
-		make_anim_library.disabled = false
-		make_anim_library.text = "Make AnimationLibrary"
-		make_anim_library.button_pressed = true
+	if has_spriteframe_keyframer and make_anim_library != null:
+			make_anim_library.disabled = false
+			make_anim_library.text = "Make AnimationLibrary"
+			make_anim_library.button_pressed = true
 	
 	if quick_sprite_path != null or quick_atlas_path != null and importer.needs_atlas_path():
 		quick_sprite_path.connect("text_changed", autofill_atlas_path)

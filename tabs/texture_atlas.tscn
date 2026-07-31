@@ -1,0 +1,149 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://addons/sprite_importer/classes/ImporterTab.gd" id="1"]
+[ext_resource type="Script" path="res://addons/sprite_importer/importers/texture_atlas.gd" id="2"]
+[ext_resource type="Script" path="res://addons/sprite_importer/classes/ImporterAnimationTree.gd" id="3"]
+
+[node name="TextureAtlas" type="HSplitContainer"]
+script = ExtResource("1")
+importer_script = ExtResource("2")
+quick_sprite_path = NodePath("VBoxContainer/Panel/ScrollContainer/VBoxContainer/SpritePathContainer/SpritePath")
+quick_atlas_path = NodePath("VBoxContainer/Panel/ScrollContainer/VBoxContainer/AtlasPathContainer/AtlasPath")
+quick_fps = NodePath("VBoxContainer/Panel/ScrollContainer/VBoxContainer/FPS/SpinBox")
+quick_loop = NodePath("VBoxContainer/Panel/ScrollContainer/VBoxContainer/Loop")
+quick_compress_output = NodePath("VBoxContainer/Panel/ScrollContainer/VBoxContainer/CompressOutput")
+make_anim_library = NodePath("VBoxContainer/Panel/ScrollContainer/VBoxContainer/MakeAnimationLibrary")
+anim_tree = NodePath("VBoxContainer2/Tree")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Importer"
+horizontal_alignment = 1
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/Panel/ScrollContainer"]
+custom_minimum_size = Vector2(378, 260)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="SpritePathContainer" type="HBoxContainer" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/SpritePathContainer"]
+layout_mode = 2
+text = "Sprite Path:"
+vertical_alignment = 1
+
+[node name="SpritePath" type="LineEdit" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/SpritePathContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "res://path/to/sprite.png"
+metadata/is_sprite_path = true
+
+[node name="Folder" type="Button" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/SpritePathContainer"]
+layout_mode = 2
+text = "..."
+
+[node name="AtlasPathContainer" type="HBoxContainer" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/AtlasPathContainer"]
+layout_mode = 2
+text = "Atlas Path:"
+vertical_alignment = 1
+
+[node name="AtlasPath" type="LineEdit" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/AtlasPathContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "res://path/to/atlas.json"
+
+[node name="Folder" type="Button" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/AtlasPathContainer"]
+layout_mode = 2
+text = "..."
+
+[node name="FPS" type="HBoxContainer" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/FPS"]
+layout_mode = 2
+text = "Frame Rate:"
+vertical_alignment = 1
+
+[node name="SpinBox" type="SpinBox" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer/FPS"]
+layout_mode = 2
+max_value = 2147480000.0
+value = 24.0
+suffix = " FPS"
+
+[node name="Loop" type="CheckBox" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Loop"
+
+[node name="CompressOutput" type="CheckBox" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Compress Output"
+
+[node name="MakeAnimationLibrary" type="CheckBox" parent="VBoxContainer/Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Make AnimationLibrary"
+
+[node name="AddToTree" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Add To Tree ->"
+
+[node name="QuickImport" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Quick Import"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "Animation Tree"
+horizontal_alignment = 1
+
+[node name="Tree" type="Tree" parent="VBoxContainer2" node_paths=PackedStringArray("tab")]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+allow_rmb_select = true
+hide_root = true
+script = ExtResource("3")
+tab = NodePath("../..")
+
+[node name="ImportTree" type="Button" parent="VBoxContainer2"]
+layout_mode = 2
+text = "Make From Tree"
+
+[connection signal="pressed" from="VBoxContainer/Panel/ScrollContainer/VBoxContainer/SpritePathContainer/Folder" to="." method="folder_button" binds= [NodePath("../../../../SpritePathContainer/SpritePath")]]
+[connection signal="pressed" from="VBoxContainer/Panel/ScrollContainer/VBoxContainer/AtlasPathContainer/Folder" to="." method="folder_button" binds= [NodePath("../../../../AtlasPathContainer/AtlasPath")]]
+[connection signal="pressed" from="VBoxContainer/AddToTree" to="." method="add_to_tree"]
+[connection signal="pressed" from="VBoxContainer/QuickImport" to="." method="on_quick_import"]
+[connection signal="pressed" from="VBoxContainer2/ImportTree" to="VBoxContainer2/Tree" method="import_tree"]
